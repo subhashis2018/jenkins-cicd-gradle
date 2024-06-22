@@ -15,6 +15,7 @@ pipeline {
         DOCKER_IMAGE = "myapp/jenkins-cicd-gradle"
         DOCKER_TAG = "${params.ENV}-${env.BUILD_ID}"
         DOCKER_REGISTRY_CREDENTIALS_ID = 'docker_auth'
+        DOCKER_REGISTRY_USER='subhashis2022'
         GITHUB_CREDENTIALS_ID = 'github_auth'
         GITHUB_REPO = 'https://github.com/subhashis2018/jenkins-cicd-gradle.git'
     }
@@ -76,7 +77,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('', "${DOCKER_REGISTRY_CREDENTIALS_ID}") {
+                    docker.withRegistry("${DOCKER_REGISTRY_USER}", "${DOCKER_REGISTRY_CREDENTIALS_ID}") {
                         docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
                     }
                 }
