@@ -23,6 +23,15 @@ pipeline {
             }
         }
 
+        stage('Prepare') {
+            steps {
+                script {
+                    // Change permissions of gradlew
+                    sh 'chmod +x ./gradlew'
+                }
+            }
+        }
+
         stage('Build and Test') {
             steps {
                 script {
