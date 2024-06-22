@@ -70,5 +70,5 @@ tasks.withType(Pmd) {
 }
 
 tasks.check {
-    dependsOn pmd
+    dependsOn tasks.withType(Pmd)
 }
