@@ -4,6 +4,11 @@ pipeline {
     parameters {
         choice(name: 'ENV', choices: ['dev', 'staging', 'production'], description: 'Choose the environment to deploy')
     }
+    tools {
+        gradle 'gradle-8.5' 
+        jdk 'jdk-17' 
+        git 'git'
+    }
 
     environment {
         DOCKER_IMAGE = "myapp/jenkins-cicd-gradle"
