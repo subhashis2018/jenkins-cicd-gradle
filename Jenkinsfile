@@ -55,6 +55,7 @@ pipeline {
                 always {
                     publishHTML(target: [reportDir: 'build/reports/pmd', reportFiles: 'main.html', reportName: 'PMD Report'])
                     publishHTML(target: [reportDir: 'build/reports/jacoco/test/html', reportFiles: 'index.html', reportName: 'JaCoCo Report'])
+                    jacoco(execPattern: 'build/jacoco/test.exec', sourcePattern: 'src/main/java', classPattern: 'build/classes/java/main', exclusionPattern: '')
                 }
             }
         }

@@ -62,11 +62,15 @@ pmd {
     ]
 }
 
-tasks.withType(Pmd) {
+jacocoTestReport {
     reports {
-        xml.required.set(true)
-        html.required.set(true)
+        xml.required = true
+        html.required = true
     }
+}
+
+test {
+    finalizedBy jacocoTestReport
 }
 
 tasks.check {
