@@ -15,7 +15,6 @@ pipeline {
         DOCKER_IMAGE = "subhashis2022/jenkins-cicd-gradle"
         DOCKER_TAG = "${params.ENV}-${env.BUILD_ID}"
         DOCKER_REGISTRY_CREDENTIALS_ID = 'docker_auth'
-        DOCKER_REGISTRY_USER='subhashis2022'
         GITHUB_CREDENTIALS_ID = 'github_auth'
         GITHUB_REPO = 'https://github.com/subhashis2018/jenkins-cicd-gradle.git'
     }
@@ -24,7 +23,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Checkout the repository from GitHub
                     git url: "${env.GITHUB_REPO}", credentialsId: "${env.GITHUB_CREDENTIALS_ID}"
                 }
             }
@@ -33,7 +31,6 @@ pipeline {
         stage('Prepare') {
             steps {
                 script {
-                    // Change permissions of gradlew
                     sh 'chmod +x ./gradlew'
                 }
             }
@@ -42,7 +39,6 @@ pipeline {
         stage('Build and Test') {
             steps {
                 script {
-                    // Build and test the application
                     sh './gradlew clean build'
                 }
             }
@@ -51,14 +47,12 @@ pipeline {
         stage('Run PMD and JaCoCo Reports') {
             steps {
                 script {
-                    // Generate PMD and JaCoCo reports
                     sh './gradlew pmdMain pmdTest'
                     sh './gradlew jacocoTestReport'
                 }
             }
             post {
                 always {
-                    // Archive PMD and JaCoCo reports
                     publishHTML(target: [reportDir: 'build/reports/pmd', reportFiles: 'main.html', reportName: 'PMD Report'])
                     publishHTML(target: [reportDir: 'build/reports/jacoco/test/html', reportFiles: 'index.html', reportName: 'JaCoCo Report'])
                 }
@@ -68,7 +62,6 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image
                     sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
                 }
             }
@@ -77,7 +70,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry("${DOCKER_REGISTRY_USER}", "${DOCKER_REGISTRY_CREDENTIALS_ID}") {
+                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_REGISTRY_CREDENTIALS_ID}") {
                         docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
                     }
                 }
