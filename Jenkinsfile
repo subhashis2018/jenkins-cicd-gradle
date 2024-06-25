@@ -14,8 +14,8 @@ pipeline {
     environment {
         DOCKER_IMAGE = "subhashis2022/jenkins-cicd-gradle"
         DOCKER_TAG = "${params.ENV}-${env.BUILD_ID}"
-        DOCKER_REGISTRY_CREDENTIALS_ID = 'docker_auth'
-        GITHUB_CREDENTIALS_ID = 'github_auth'
+        DOCKER_REGISTRY_CREDENTIALS_ID = 'docker-auth'
+        GITHUB_CREDENTIALS_ID = 'github-auth'
         GITHUB_REPO = 'https://github.com/subhashis2018/jenkins-cicd-gradle.git'
     }
 
