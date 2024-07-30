@@ -78,6 +78,25 @@ pipeline {
             }
         }
 
-       
+        stage('Update Commit Status') {
+            steps {
+                script {
+                    def commitSha = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
+                    def context = "Jenkins Build"
+                    def description = "Build and push completed"
+                    def state = "success"
+                    def githubApiUrl = "https://api.github.com/repos/subhashis2018/jenkins-cicd-gradle/statuses/${commitSha}"
+
+                    withCredentials([string(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", variable: 'GITHUB_TOKEN')]) {
+                        sh """
+                            curl -H "Authorization: token ${GITHUB_TOKEN}" \
+                                 -H "Content-Type: application/json" \
+                                 -d '{"state": "${state}", "target_url": "${env.BUILD_URL}", "description": "${description}", "context": "${context}"}' \
+                                 ${githubApiUrl}
+                        """
+                    }
+                }
+            }
+        }
     }
 }
